@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<meta charset='UTF-8'>
+</head>
+<body style='background-color:white; margin:0; padding:10px;'>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { background:#0a0e17; color:#fff; font-family:sans-serif; text-align:center; padding:20px; }
+        img { width:120px; height:120px; border-radius:50%; border:2px solid #fff; object-fit:cover; }
+        button { padding:12px; border-radius:10px; background:#00b09b; color:#fff; border:none; cursor:pointer; width:100%; margin-top:10px; }
+    </style>
+</head>
+<body>
+    <h2>App Isaac Studio – Gráficos Matemáticos</h2>
+    <img src="file:///android_asset/avatar.png" alt="Avatar Local">
+    <button onclick="IsaacBridge.postMessage(JSON.stringify({'acao':'ir_tela','valor':'grafico2d'}))">
+        Gráficos 2D
+    </button>
+    <button onclick="IsaacBridge.postMessage(JSON.stringify({'acao':'ir_tela','valor':'grafico3d'}))">
+        Gráficos 3D
+    </button>
+    <button onclick="IsaacBridge.postMessage(JSON.stringify({'acao':'ir_tela','valor':'estatistica'}))">
+        Estatística & Probabilidade
+    </button>
+</body>
+</html>
+</body>
+</html>
