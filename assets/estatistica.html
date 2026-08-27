@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<meta charset='UTF-8'>
+</head>
+<body style='background-color:white; margin:0; padding:10px;'>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { background:#0a0e17; color:#fff; font-family:sans-serif; text-align:center; padding:20px; }
+        textarea, button { width:100%; padding:10px; margin-top:10px; border-radius:5px; border:none; }
+        button { background:#8a2be2; color:#fff; cursor:pointer; }
+        #area_grafico { margin-top:20px; }
+    </style>
+</head>
+<body>
+    <h3>Estatística & Probabilidade</h3>
+    <textarea id="dados" rows="4" placeholder="Insira valores separados por vírgula, ex.: 1,2,3,4,5"></textarea>
+    <button onclick="gerar()">Histograma</button>
+    <div id="area_grafico"></div>
+    <button onclick="IsaacBridge.postMessage(JSON.stringify({'acao':'nav_interface','valor':'interface'}))">
+        Voltar
+    </button>
+
+    <script>
+        function gerar(){
+            const txt = document.getElementById('dados').value;
+            IsaacBridge.postMessage(JSON.stringify({'acao':'gerar_estat','valor':txt}));
+        }
+
+        window.addEventListener('message', e=>{
+            try{
+                const data = JSON.parse(e.data);
+                if(data.acao==='imagem_estat'){
+                    const img = document.createElement('img');
+                    img.src = 'data:image/png;base64,'+data.valor;
+                    const area = document.getElementById('area_grafico');
+                    area.innerHTML = '';
+                    area.appendChild(img);
+                }
+            }catch{}
+        });
+    </script>
+</body>
+</html>
+</body>
+</html>
