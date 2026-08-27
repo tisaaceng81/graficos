@@ -1,0 +1,84 @@
+entrada = input()
+if '|' in entrada:
+    acao, valor = entrada.split('|', 1)
+
+    # Navegação entre telas
+    if acao == 'nav_interface':
+        print('mudar_tela:interface')
+    elif acao == 'ir_tela':
+        if valor == 'grafico2d':
+            print('mudar_tela:grafico2d')
+        elif valor == 'grafico3d':
+            print('mudar_tela:grafico3d')
+        elif valor == 'estatistica':
+            print('mudar_tela:estatistica')
+    # ---------- Geração de gráficos ----------
+    elif acao == 'gerar_2d':
+        import matplotlib
+        matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
+        import numpy as np
+        import io, base64
+
+        # Avalia a expressão segura (apenas funções numpy)
+        x = np.linspace(-10, 10, 400)
+        try:
+            y = eval(valor, {'np':np, 'x':x, '__builtins__':{}})
+        except Exception as exc:
+            print(f'erro|{exc}')
+        else:
+            plt.figure(figsize=(5,3))
+            plt.style.use('dark_background')
+            plt.plot(x, y, color='#00fff0')
+            plt.grid(True, linestyle='--', alpha=0.2)
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png')
+            img_b64 = base64.b64encode(buf.getvalue()).decode()
+            print(f'imagem_2d|{img_b64}')
+            plt.close()
+    elif acao == 'gerar_3d':
+        import matplotlib
+        matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
+        from mpl_toolkits.mplot3d import Axes3D
+        import numpy as np, io, base64
+
+        # Avalia a expressão em (x, y)
+        X = np.linspace(-6, 6, 80)
+        Y = np.linspace(-6, 6, 80)
+        X, Y = np.meshgrid(X, Y)
+        try:
+            Z = eval(valor, {'np':np, 'x':X, 'y':Y, '__builtins__':{}})
+        except Exception as exc:
+            print(f'erro|{exc}')
+        else:
+            fig = plt.figure(figsize=(5,3))
+            ax = fig.add_subplot(111, projection='3d')
+            ax.plot_surface(X, Y, Z, cmap='viridis')
+            ax.set_axis_off()
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png')
+            img_b64 = base64.b64encode(buf.getvalue()).decode()
+            print(f'imagem_3d|{img_b64}')
+            plt.close()
+    elif acao == 'gerar_estat':
+        import matplotlib
+        matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
+        import numpy as np, io, base64
+
+        # Converte a lista de valores
+        try:
+            lista = [float(v.strip()) for v in valor.split(',') if v.strip()!='']
+        except Exception as exc:
+            print(f'erro|{exc}')
+        else:
+            plt.figure(figsize=(5,3))
+            plt.style.use('dark_background')
+            plt.hist(lista, bins=15, color='#ffcc00', edgecolor='#fff')
+            plt.grid(True, linestyle='--', alpha=0.2)
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png')
+            img_b64 = base64.b64encode(buf.getvalue()).decode()
+            print(f'imagem_estat|{img_b64}')
+            plt.close()
